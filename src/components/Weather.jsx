@@ -41,7 +41,25 @@ class Weather extends Component {
             description,
             icon,
             renderDiv: true
-        });       
+        });
+
+        this.changeWeatherIconSize();
+    }
+
+    changeWeatherIconSize = () => {
+        const wheaterStatsWidth = document.getElementsByClassName('weatherStats')[0].offsetWidth,
+        weatherStatsTextWidth = document.getElementsByClassName('weatherStatsText')[0].offsetWidth,
+        weatherIcon = document.getElementsByClassName('weatherIcon')[0];
+
+        const wheaterIconSize = setInterval(() => {
+            if(weatherIcon.naturalWidth) {
+                clearInterval(wheaterIconSize);
+                console.log(wheaterStatsWidth, weatherStatsTextWidth, weatherIcon.offsetWidth);
+            } else {
+                console.log('n');
+            }
+        },10);
+
     }
 
     render() {
@@ -52,10 +70,10 @@ class Weather extends Component {
                 </div>
                 <div className={this.state.renderDiv ? 'weatherStats' : 'hide'}>
                     <div className="weatherStatsText">
-                        <p>{this.state.temp} °C</p>
+                        <p>{this.state.temp}°C</p>
                         <p>{this.state.description}</p>
                     </div>
-                    <img src={this.state.icon} alt='Icon'></img>
+                    <img className='weatherIcon' src={this.state.icon} alt='Icon'></img>
                 </div>
             </div>
         )
