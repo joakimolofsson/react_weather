@@ -51,9 +51,22 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-    margin-right: 10px;
+    padding-right: 10px;
     font-weight: bold;
     color: #ffffff;
     font-size: 15px;
 }
 
+.weatherDescriptionAnimationContainer {
+    position: relative;
+    width: 90px;
+    height: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.weatherDescriptionAnimationText {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

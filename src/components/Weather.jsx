@@ -6,14 +6,15 @@ class Weather extends Component {
         temp: undefined,
         description: undefined,
         icon: undefined,
-        renderDiv: false
+        renderDiv: false,
+        animateDescription: false
     }
 
     componentDidMount() {
         console.log('componentDidMount');
     }
 
-    getLocation = async () => {
+    getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(pos => {
                 const lat = pos.coords.latitude,
@@ -43,37 +44,81 @@ class Weather extends Component {
             renderDiv: true
         });
 
-        this.changeWeatherIconSize();
+        this.checkIconAndTextSize();
     }
 
-    changeWeatherIconSize = () => {
-        const wheaterStatsWidth = document.getElementsByClassName('weatherStats')[0].offsetWidth,
+    checkIconAndTextSize = () => {
+        //Test weather animation
+        this.setState({
+            description: 'This is a very long sentence...'
+        });
+        
+        const weatherStatsWidth = document.getElementsByClassName('weatherStats')[0].offsetWidth,
         weatherStatsTextWidth = document.getElementsByClassName('weatherStatsText')[0].offsetWidth,
         weatherIcon = document.getElementsByClassName('weatherIcon')[0];
 
-        const wheaterIconSize = setInterval(() => {
+        const getWeatherIconWidth = setInterval(() => {
             if(weatherIcon.naturalWidth) {
-                clearInterval(wheaterIconSize);
-                console.log(wheaterStatsWidth, weatherStatsTextWidth, weatherIcon.offsetWidth);
-            } else {
-                console.log('n');
+                clearInterval(getWeatherIconWidth);
+                const weatherIconWidth = weatherIcon.offsetWidth;
+                if(weatherStatsTextWidth + weatherIconWidth > weatherStatsWidth) {
+                    this.startWeatherTextAnimation();
+                }
             }
-        },10);
+        },100);
+    }
 
+    startWeatherTextAnimation = () => {
+        this.setState({
+            animateDescription: true
+        });
+
+        const text1 = document.getElementsByClassName('wdat1')[0],
+        text2 = document.getElementsByClassName('wdat2')[0],
+        textMarginRight = 10;
+
+        text1.style.left = textMarginRight + 'px';
+        text2.style.left = text2.offsetWidth + textMarginRight + textMarginRight + 'px';
+        
+        function animateText(elem) {
+            const text = elem,
+            animationSpeed = 40;
+
+            if(text.offsetLeft > -text.offsetWidth - textMarginRight) {
+                text.style.left = text.offsetLeft - 1 + 'px';
+                setTimeout(function() {
+                    window.requestAnimationFrame(function(){
+                        animateText(text);
+                    });
+                },animationSpeed);
+            } else {
+                text.style.left = text.offsetWidth + textMarginRight + 'px';
+                setTimeout(function() {
+                    window.requestAnimationFrame(function(){
+                        animateText(text);
+                    });
+                },animationSpeed);
+            }
+        }
+        animateText(text1);
+        animateText(text2);
     }
 
     render() {
         return (
             <div className="weatherContainer">
-                <div className={this.state.renderDiv ? 'hide' : 'weatherBtn'} onClick={this.getLocation}>
+                <div className={this.state.renderDiv ? "hide" : "weatherBtn"} onClick={this.getLocation}>
                     <p>Weather API</p>
                 </div>
-                <div className={this.state.renderDiv ? 'weatherStats' : 'hide'}>
+                <div className={this.state.renderDiv ? "weatherStats" : "hide"}>
                     <div className="weatherStatsText">
                         <p>{this.state.temp}°C</p>
-                        <p>{this.state.description}</p>
+                        <div className={this.state.animateDescription ? "weatherDescriptionAnimationContainer" : ""}>
+                            <p className={this.state.animateDescription ? "weatherDescriptionAnimationText wdat1" : ""}>{this.state.description}</p>
+                            <p className={this.state.animateDescription ? "weatherDescriptionAnimationText wdat2" : "hide"}>{this.state.description}</p>
+                        </div>
                     </div>
-                    <img className='weatherIcon' src={this.state.icon} alt='Icon'></img>
+                    <img className="weatherIcon" src={this.state.icon} alt="Icon"></img>
                 </div>
             </div>
         )
