@@ -1,0 +1,42 @@
+.savedWeatherContainer {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 150px;
+    padding: 10px;
+    background: orange;
+}
+
+.savedWeatherTitle {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.savedWeatherItem {
+    border: 2px solid green;
+    padding: 3px;
+    margin-bottom: 10px;
+}
+
+.savedWeatherText {
+    font-size: 12px;
+}
+
+.savedWeatherDelete {
+    background: red;
+    cursor: pointer;
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+.savedWeatherSave {
+    background: lime;
+    width: 80%;
+    margin: 10px auto 0 auto;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+    text-align: center;
+    cursor: pointer;
+}

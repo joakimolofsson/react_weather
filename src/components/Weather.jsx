@@ -8,15 +8,15 @@ class Weather extends Component {
         icon: undefined,
         showWeatherStats: false,
         animateWeatherDescription: false
-    };
+    }
 
     componentDidMount() {
         //console.log('componentDidMount');
-    };
+    }
 
     getLocation = () => {
         navigator.geolocation.getCurrentPosition(this.positionWeatherData, this.errorMessage);
-    };
+    }
     
     positionWeatherData = async pos => {
         const lat = pos.coords.latitude,
@@ -36,9 +36,10 @@ class Weather extends Component {
             description,
             icon,
         });
-        
+
         this.checkIconAndTextSize();
-    };
+        this.saveWeatherData();
+    }
 
     errorMessage = err => {
         this.setState({
@@ -47,7 +48,7 @@ class Weather extends Component {
         });
         const weatherIcon = document.getElementsByClassName('weatherIcon')[0];
         weatherIcon.className = 'hide';
-    };
+    }
 
     convertKelvin = (kelvin, country) => {
         const fahrenheitCountries = ['BS','BZ','GU','KY','PR','PW','US','VI '];
@@ -58,7 +59,7 @@ class Weather extends Component {
             const celsius = kelvin - 273.15;
             return celsius.toFixed(2)  + '°C';
         }
-    };
+    }
 
     checkIconAndTextSize = () => {
         /* this.setState({
@@ -85,7 +86,7 @@ class Weather extends Component {
                 //console.log('Waiting for icon to load...');
             }
         },100);
-    };
+    }
 
     startWeatherTextAnimation = () => {
         this.setState({
@@ -120,7 +121,14 @@ class Weather extends Component {
         }
         this.animateText(text1);
         this.animateText(text2);
-    };
+    }
+
+    saveWeatherData = () => {
+        this.props.saveWeatherData(
+            this.state.temp,
+            this.state.description
+        );
+    }
 
     render() {
         return (
@@ -140,7 +148,7 @@ class Weather extends Component {
                 </div>
             </div>
         );
-    };
-};
+    }
+}
 
 export default Weather;
